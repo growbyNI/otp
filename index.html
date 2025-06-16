@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Motion in One Dimension</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #0d6efd;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .admin-btn {
+      background-color: white;
+      color: #0d6efd;
+      border: none;
+      padding: 8px 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .container {
+      padding: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    #adminPanel {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #chatBox {
+      border: 1px solid #ccc;
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+    #messageInput {
+      width: 75%;
+      padding: 8px;
+      margin-right: 5px;
+    }
+    #sendBtn {
+      padding: 8px 12px;
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #passwordModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    #passwordBox {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    #passwordInput {
+      padding: 8px;
+      width: 80%;
+      margin-top: 10px;
+    }
+    #submitPassword {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #0d6efd;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #closeModal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+    }
+    .hide-btn{
+        background: none;
+        border-radius: 5px; 
+        margin-bottom: 5px;  
+    }
+    .p{
+        font-weight: lighter;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Motion in One Dimension</h1>
+    <button class="admin-btn" id="adminBtn">Admin Panel</button>
+  </header>
+
+  <div class="container" id="mainContent">
+    <h2>Displacement</h2>
+    
+    <h4 class="p">The displacement of a particle is defined as the difference between its final position and its initial position. We represent the displacement as Δx.
+    </h4>
+
+    <h4 class="p">Δx = xf− xi</h4>
+
+    <h4 class="p">The subscripts iand f refer to be initialand final positions. These are not necessarily the positions from which the particle starts its motion nor where its motion ceases. The i and f designate the particular initial and final positions we are considering out of the entire motion of the object. Notethe order : final position minus initial position . Whenever we calculate “delta” anywhere, we always take the final value minus the initial value.</h4>
+
+    <h2>Average Velocity and Average Speed</h2>
+
+    <h4 class="p">The average velocity of an object travelling along the x−axis is defined as the ratio of its displacement to the time taken for that displacement.</h4>
+
+    <h4>vav=</h4>
+    <img src="img1.png" alt="error img">
+
+    <h4 class="p">The average speed of a particle is defined as the ratio of the total distance travelled to the time taken.</h4>
+    <h4 class="p">Average speed = Total distance travelled/Δt</h4>
+
+    <h4 class="p">Note that velocity and speed have different meanings.</h4>
+ 
+
+    <h3>Example : 7.1</h3>
+
+    <h4 class="p">A bird flies toward east at 10 m/s for 100 m. It then turns around and flies at 20 m/s for 15 s. Find</h4>
+
+    <h4 class="p">(a) its average speed</h4>
+    <h4 class="p">(b) its average velocity</h4>
+
+    <h3>Solution</h3>
+
+    <h4 class="p">Let us take the xaxis to point east. A sketch of the path is shown in the figure. To find the required quantities, we need the total time interval. The first part of the journey took Δt1= (100 m)/ (10 m/s) = 10 s, and we are given Δt2= 15 s for the second part. Hence the total time interval is</h4>
+
+    <h4>Δt= Δt1+ Δt2= 25 s</h4>
+    <img src="img2.png" alt="error img">
+
+    <h4 class="p">The bird flies 100 m east and then (20 m/s) (15 s) = 300 m west</h4>
+
+
+
+<h4 class="p">(a)Average speed = Distance/Δt = 100m + 300 m/25s = 16m/s</h4>
+
+<h4 class="p">(b)The net displacement is</h4>
+
+<h4 class="p">Δx= Δx1+ Δx2= 100 m − 300 m = −200 m</h4>
+
+<h4 class="p">So that</h4>
+<h4 class="p">vav= Δx/Δt = -200m/25s = -8  m/s</h4>
+
+<h4 class="p">The negative sign means that vavis directed toward the west.</h4>
+
+</div>
+  <div id="adminPanel" class="hidden">
+    <h2>Admin Chat Panel</h2>
+    <button class="hide-btn" id="hide-btn">hide</button>
+    <div id="chatBox"></div>
+    <input type="text" id="messageInput" placeholder="Type your message..." />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <div id="passwordModal" class="hidden">
+    <div id="passwordBox">
+      <button id="closeModal">x</button>
+      <h3>Enter Admin Password</h3>
+      <input type="password" id="passwordInput" placeholder="Password">
+      <br>
+      <button id="submitPassword">Submit</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('adminBtn').addEventListener('click', function () {
+      document.getElementById('passwordModal').style.display='block';
+    });
+
+    document.getElementById('closeModal').addEventListener('click', function () {
+      document.getElementById('passwordModal').style.display='none';
+    });
+
+    document.getElementById('hide-btn').addEventListener('click', function() 
+    {
+        document.getElementById('adminPanel').style.display='none';
+        document.getElementById('mainContent').style.display='block';
+    });
+
+
+    document.getElementById('submitPassword').addEventListener('click', function () {
+      const password = document.getElementById('passwordInput').value;
+      if (password === "Nandani") {
+        document.getElementById('mainContent').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        document.getElementById('passwordModal').style.display='none';
+      } else {
+        alert("Incorrect password!");
+      }
+    });
+
+   const input = document.getElementById('messageInput');
+document.getElementById('sendBtn').addEventListener('click', function () {
+  const msg = input.value.trim();
+  if (msg !== '') {
+    db.ref('messages').push({
+      user: 'Admin',
+      text: msg,
+      time: Date.now()
+    });
+    input.value = '';
+  }
+});
+
+// Load existing messages
+db.ref('messages').on('child_added', function(snapshot) {
+  const data = snapshot.val();
+  const div = document.createElement('div');
+  div.textContent = `${data.user}: ${data.text}`;
+  document.getElementById('chatBox').appendChild(div);
+});
+
+  </script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyALsHqqsteKQSp5lFtUXsaLASE8QBeejsM",
+    authDomain: "motion-f3e7b.firebaseapp.com",
+    projectId: "motion-f3e7b",
+    storageBucket: "motion-f3e7b.firebasestorage.app",
+    messagingSenderId: "39637220542",
+    appId: "1:39637220542:web:2c1ecea0737f8f617af2ef"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
+</body>
+</html>

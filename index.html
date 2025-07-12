@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Countdown to December 6, 2025</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       height: 100vh;
       display: flex;
@@ -19,105 +14,185 @@
       background: linear-gradient(135deg, #1f1c2c, #928dab);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
+      overflow: hidden;
     }
-
     .container {
       text-align: center;
       background: rgba(0, 0, 0, 0.4);
       padding: 40px 30px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 2;
+      position: relative;
     }
-
     h1 {
       font-size: 32px;
       margin-bottom: 30px;
       text-shadow: 2px 2px 10px #000;
     }
-
     .countdown {
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 30px;
-      font-size: 24px;
-      font-weight: 600;
     }
-
     .time-box {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 20px;
       min-width: 100px;
-      transition: 0.3s;
       box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      perspective: 1000px;
     }
-
-    .time-box:hover {
-      transform: scale(1.05);
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .number {
+    .flip {
       font-size: 36px;
       color: #00ffcc;
       margin-bottom: 5px;
+      position: relative;
+      display: inline-block;
+      animation: flip 0.7s ease-in-out;
     }
-
+    @keyframes flip {
+      0% { transform: rotateX(0); }
+      50% { transform: rotateX(180deg); }
+      100% { transform: rotateX(0); }
+    }
     .label {
       font-size: 16px;
       text-transform: uppercase;
       color: #ccc;
     }
-
     @media (max-width: 600px) {
-      .countdown {
-        flex-direction: column;
-        gap: 20px;
-      }
+      .countdown { flex-direction: column; gap: 20px; }
+    }
+    .celebrate {
+      font-size: 36px;
+      animation: glow 2s ease-in-out infinite alternate, pop 1s ease forwards;
+      color: #fff;
+      text-shadow: 0 0 10px #ff0, 0 0 20px #ff00ff, 0 0 30px #00ffff;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00ffc8, 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
+      to { text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff; }
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1.2); opacity: 1; }
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Countdown to December 6, 2025</h1>
-    <div class="countdown" id="countdown">
-      <div class="time-box">
-        <div class="number" id="days">--</div>
-        <div class="label">Days</div>
-      </div>
-      <div class="time-box">
-        <div class="number" id="hours">--</div>
-        <div class="label">Hours</div>
-      </div>
-      <div class="time-box">
-        <div class="number" id="minutes">--</div>
-        <div class="label">Minutes</div>
-      </div>
-    </div>
+<canvas id="confettiCanvas"></canvas>
+
+<div class="container" id="container">
+  <h1>Countdown to December 6, 2025</h1>
+  <div class="countdown" id="countdown">
+    <div class="time-box"><div class="flip" id="days">--</div><div class="label">Days</div></div>
+    <div class="time-box"><div class="flip" id="hours">--</div><div class="label">Hours</div></div>
+    <div class="time-box"><div class="flip" id="minutes">--</div><div class="label">Minutes</div></div>
+    <div class="time-box"><div class="flip" id="seconds">--</div><div class="label">Seconds</div></div>
   </div>
+</div>
 
-  <script>
-    function updateCountdown() {
-      const targetDate = new Date('December 6, 2025 00:00:00').getTime();
-      const now = new Date().getTime();
-      const diff = targetDate - now;
+<script>
+  const daysEl = document.getElementById("days");
+  const hoursEl = document.getElementById("hours");
+  const minutesEl = document.getElementById("minutes");
+  const secondsEl = document.getElementById("seconds");
+  const container = document.getElementById("container");
+  const countdownEl = document.getElementById("countdown");
 
-      if (diff <= 0) {
-        document.getElementById('countdown').innerHTML = '<h2>🎉 It\'s December 6, 2025!</h2>';
-        return;
-      }
+  let prev = {};
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  function updateCountdown() {
+    const targetDate = new Date("December 6, 2025 00:00:00").getTime();
+    const now = new Date().getTime();
+    const diff = targetDate - now;
 
-      document.getElementById('days').textContent = days;
-      document.getElementById('hours').textContent = hours;
-      document.getElementById('minutes').textContent = minutes;
+    if (diff <= 0) {
+      startCelebration();
+      return;
     }
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  </script>
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+    animateIfChanged(daysEl, d, 'd');
+    animateIfChanged(hoursEl, h, 'h');
+    animateIfChanged(minutesEl, m, 'm');
+    animateIfChanged(secondsEl, s, 's');
+  }
+
+  function animateIfChanged(el, newVal, key) {
+    if (prev[key] !== newVal) {
+      el.textContent = newVal;
+      el.classList.remove("flip");
+      void el.offsetWidth; // trigger reflow
+      el.classList.add("flip");
+      prev[key] = newVal;
+    }
+  }
+
+  function startCelebration() {
+    container.innerHTML = `<h2 class="celebrate">🎉 It's December 6, 2025! 🎉</h2>`;
+    launchConfetti();
+  }
+
+  function launchConfetti() {
+    const canvas = document.getElementById("confettiCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const pieces = [];
+    const colors = ["#ff0", "#0ff", "#f0f", "#0f0", "#f00", "#00f"];
+
+    for (let i = 0; i < 300; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        speed: Math.random() * 5 + 2,
+        size: Math.random() * 10 + 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 2 * Math.PI,
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of pieces) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+
+        p.y += p.speed;
+        p.rotation += 0.02;
+
+        if (p.y > canvas.height) {
+          p.y = -p.size;
+          p.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
 </body>
 </html>
